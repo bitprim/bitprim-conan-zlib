@@ -17,6 +17,7 @@ class ZlibConan(ConanFile):
     license = "http://www.zlib.net/zlib_license.html"
     description = "A Massively Spiffy Yet Delicately Unobtrusive Compression Library " \
                   "(Also Free, Not to Mention Unencumbered by Patents)"
+    build_policy = "missing"
     
     def configure(self):
         del self.settings.compiler.libcxx
