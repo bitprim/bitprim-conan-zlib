@@ -10,7 +10,7 @@ if __name__ == "__main__":
     for settings, options, env_vars, build_requires in builder.builds:
         if settings["build_type"] == "Release" \
                and settings["arch"] == "x86_64" \
-               and not options["zlib:shared"]:
+               and not("zlib:shared" in options and options["zlib:shared"]):
             filtered_builds.append([settings, options, env_vars, build_requires])
     builder.builds = filtered_builds
     builder.run()
