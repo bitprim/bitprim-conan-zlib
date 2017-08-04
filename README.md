@@ -1,7 +1,5 @@
 [![Build Status](https://travis-ci.org/bitprim/bitprim-conan-zlib.svg)](https://travis-ci.org/bitprim/bitprim-conan-zlib)
-# [![Build Status](https://ci.appveyor.com/api/projects/status/github/lasote/conan-zlib)](https://ci.appveyor.com/project/lasote/conan-zlib)
-
-
+# [![Build Status](https://ci.appveyor.com/api/projects/status/github/bitprim/bitprim-conan-zlib)](https://ci.appveyor.com/project/bitprim/bitprim-conan-zlib)
 
 # conan-zlib
 
