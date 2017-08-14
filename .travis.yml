@@ -4,7 +4,7 @@ env:
      - CONAN_REFERENCE: "zlib/1.2.8"
      - CONAN_USERNAME: "bitprim"
      - CONAN_LOGIN_USERNAME: "bitprim@bitprim"
-     - CONAN_CHANNEL: "testing"
+     - CONAN_CHANNEL: "stable"
      - CONAN_UPLOAD: "https://api.bintray.com/conan/bitprim/bitprim"
      - CONAN_STABLE_BRANCH_PATTERN: "release/*"
 

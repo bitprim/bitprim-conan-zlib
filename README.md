@@ -18,20 +18,20 @@ The packages generated with this **conanfile** can be found in [conan.io](https:
     
 ## Upload packages to server
 
-    $ conan upload zlib/1.2.8@bitprim/testing --all
+    $ conan upload zlib/1.2.8@bitprim/stable --all
     
 ## Reuse the packages
 
 ### Basic setup
 
-    $ conan install zlib/1.2.8@bitprim/testing
+    $ conan install zlib/1.2.8@bitprim/stable
     
 ### Project setup
 
 If you handle multiple dependencies in your project is better to add a *conanfile.txt*
     
     [requires]
-    zlib/1.2.8@bitprim/testing
+    zlib/1.2.8@bitprim/stable
 
     [options]
     zlib:shared=true # false
