@@ -29,17 +29,50 @@ class ZlibConan(ConanFile):
     ZIP_FOLDER_NAME = "zlib-%s" % version
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False]}
-    default_options = "shared=False"
+
+    options = {
+                "shared": [True, False], 
+                "fPIC": [True, False]
+    }
+    default_options = "shared=False", "fPIC=True"
+
     exports_sources = ["CMakeLists.txt"]
     url = "http://github.com/bitprim/bitprim-conan-zlib"
     license = "http://www.zlib.net/zlib_license.html"
     description = "A Massively Spiffy Yet Delicately Unobtrusive Compression Library " \
                   "(Also Free, Not to Mention Unencumbered by Patents)"
+
     build_policy = "missing"
-    
+
+    @property
+    def msvc_mt_build(self):
+        return "MT" in str(self.settings.compiler.runtime)
+
+    @property
+    def fPIC_enabled(self):
+        if self.settings.compiler == "Visual Studio":
+            return False
+        else:
+            return self.options.fPIC
+
+    @property
+    def is_shared(self):
+        if self.settings.compiler == "Visual Studio" and self.msvc_mt_build:
+            return False
+        else:
+            return self.options.shared
+
     def configure(self):
         del self.settings.compiler.libcxx  #Pure-C library
+
+    def config_options(self):
+        self.output.info('*-*-*-*-*-* def config_options(self):')
+        if self.settings.compiler == "Visual Studio":
+            self.options.remove("fPIC")
+
+            if self.options.shared and self.msvc_mt_build:
+                self.options.remove("shared")
+
 
     def source(self):
         zip_name = "zlib-%s.tar.gz" % self.version
@@ -62,7 +95,8 @@ class ZlibConan(ConanFile):
                     if self.settings.arch in ["x86", "x86_64"] and self.settings.compiler in ["apple-clang", "clang", "gcc"]:
                         env_build.flags.append('-mstackrealign')
 
-                    env_build.fpic = True
+                    # env_build.fpic = True
+                    env_build.fpic = self.fPIC_enabled
 
                     if self.settings.os == "Macos":
                         old_str = '-install_name $libdir/$SHAREDLIBM'
@@ -97,7 +131,7 @@ class ZlibConan(ConanFile):
 
         # Copying static and dynamic libs
         if tools.os_info.is_windows:
-            if self.options.shared:
+            if self.is_shared:
                 build_dir = os.path.join(self.ZIP_FOLDER_NAME, "_build")
                 self.copy(pattern="*.dll", dst="bin", src=build_dir, keep_path=False)
                 build_dir = os.path.join(self.ZIP_FOLDER_NAME, "_build/lib")
@@ -124,7 +158,7 @@ class ZlibConan(ConanFile):
                     os.rename(current_lib, os.path.join(lib_path, "libzlib.a"))
         else:
             build_dir = os.path.join(self.ZIP_FOLDER_NAME)
-            if self.options.shared:
+            if self.is_shared:
                 if self.settings.os == "Macos":
                     self.copy(pattern="*.dylib", dst="lib", src=build_dir, keep_path=False)
                 else:
