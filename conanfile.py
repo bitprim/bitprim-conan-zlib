@@ -39,7 +39,7 @@ class ZlibConan(ConanFile):
     build_policy = "missing"
     
     def configure(self):
-        del self.settings.compiler.libcxx
+        del self.settings.compiler.libcxx  #Pure-C library
 
     def source(self):
         zip_name = "zlib-%s.tar.gz" % self.version
